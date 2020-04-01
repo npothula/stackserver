@@ -1,11 +1,16 @@
 package main
 
 import (
+	"os"
+	"os/signal"
 	"stackServer/server"
-	"time"
 )
 
 func main() {
-	server.Run()
-	time.Sleep(time.Second * 1)
+	stackserver := server.StackServer{}
+	stackserver.Run()
+
+	ch := make(chan os.Signal, 1)
+	signal.Notify(ch, os.Interrupt)
+	<-ch
 }
