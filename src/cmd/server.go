@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 	"os/signal"
-	"stackServer/server"
+	"stackServer/src/server"
 )
 
 func main() {

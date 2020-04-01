@@ -1,7 +1,7 @@
 package main
 
 import (
-	"stackServer/client"
+	"stackServer/src/client"
 )
 
 func main() {

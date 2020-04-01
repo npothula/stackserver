@@ -1,0 +1,146 @@
+@startuml StackServer
+namespace client {
+    class stackTest << (S,Aquamarine) >> {
+        - conn net.Conn
+        - t *testing.T
+
+        - sockConnInit()
+        - sockConnClose()
+        - push(payload string) int
+        - pop() string
+        - testSigleRequest()
+        - testSerializedRequests(nTimes int)
+
+    }
+}
+
+
+namespace common {
+    class ConnInfo << (S,Aquamarine) >> {
+        + ConnID int64
+        + ConnReq *ConnRequest
+
+    }
+    class ConnRequest << (S,Aquamarine) >> {
+        + Conn net.Conn
+        + ConnTimestamp int64
+        + PayloadSize uint8
+        + ConnStateType ConnLiveState
+
+    }
+    class PopReqData << (S,Aquamarine) >> {
+        + Header byte
+
+    }
+    class PopResData << (S,Aquamarine) >> {
+        + Header byte
+        + Payload []byte
+
+    }
+    class PushReqData << (S,Aquamarine) >> {
+        + Header byte
+        + Payload []byte
+
+    }
+    class PushResData << (S,Aquamarine) >> {
+        + Data byte
+
+    }
+    class TAtomBool << (S,Aquamarine) >> {
+        - flag int32
+
+        + Set(value bool)
+        + Get() bool
+
+    }
+    class common.ConnLiveState << (T, #FF7700) >>  {
+    }
+}
+
+
+namespace dscollections {
+    class Deque << (S,Aquamarine) >> {
+        - container *list.List
+        - capacity int
+
+        + Append(item <font color=blue>interface</font>{}) bool
+        + Prepend(item <font color=blue>interface</font>{}) bool
+        + Pop() <font color=blue>interface</font>{}
+        + Shift() <font color=blue>interface</font>{}
+        + First() <font color=blue>interface</font>{}
+        + Last() <font color=blue>interface</font>{}
+        + Size() int
+        + Capacity() int
+        + Empty() bool
+        + Full() bool
+
+    }
+    class MinHeap << (S,Aquamarine) >> {
+        - heapArray []int64
+        - size int64
+        - maxsize int64
+
+        - leaf(index int64) bool
+        - parent(index int64) int64
+        - leftchild(index int64) int64
+        - rightchild(index int64) int64
+        - swap(first int64, second int64)
+        - upHeapify(index int64)
+        - downHeapify(current int64)
+
+        + Insert(item int64) error
+        + Top() int64
+        + Search(item int64, ind int64) int64
+        + Remove(index int64) int64
+
+    }
+    class Queue << (S,Aquamarine) >> {
+        + Enqueue(item <font color=blue>interface</font>{})
+        + Dequeue() <font color=blue>interface</font>{}
+        + Head() <font color=blue>interface</font>{}
+
+    }
+    class Stack << (S,Aquamarine) >> {
+        + Push(item <font color=blue>interface</font>{})
+        + Pop() <font color=blue>interface</font>{}
+        + Top() <font color=blue>interface</font>{}
+
+    }
+}
+"sync.RWMutex" *-- "dscollections.Deque"
+"dscollections.Deque" *-- "dscollections.Queue"
+"dscollections.Deque" *-- "dscollections.Stack"
+
+
+namespace server {
+    class StackServer << (S,Aquamarine) >> {
+        - wgServerRun sync.WaitGroup
+        - wgProcessReqs sync.WaitGroup
+        - minHeap *dscollections.MinHeap
+        - connInfoMap <font color=blue>map</font>[int64]*common.ConnRequest
+        - rwMutexConnInfo sync.RWMutex
+        - stack *dscollections.Stack
+        - rwMutexStackCheck sync.RWMutex
+        - condStackFull *sync.Cond
+        - condStackEmpty *sync.Cond
+        - connID int64
+        - connCount int32
+
+        - processPushRequest(connInfo *common.ConnInfo)
+        - processPushConnReqests(pushConnReqChanel <font color=blue>chan</font> *common.ConnInfo)
+        - processPopRequest(connInfo *common.ConnInfo)
+        - processPopConnReqests(popConnReqChanel <font color=blue>chan</font> *common.ConnInfo)
+        - processConnRequests(pushConnReqChanel <font color=blue>chan</font> *common.ConnInfo, popConnReqChanel <font color=blue>chan</font> *common.ConnInfo)
+        - processOverloadedConnection() uint
+        - prepareConnReqToProcess(connInfo *common.ConnInfo, pushConnReqChanel <font color=blue>chan</font> *common.ConnInfo, popConnReqChanel <font color=blue>chan</font> *common.ConnInfo)
+        - evaluateConnReqToProcess(connInfoChanel <font color=blue>chan</font> *common.ConnInfo, pushConnReqChanel <font color=blue>chan</font> *common.ConnInfo, popConnReqChanel <font color=blue>chan</font> *common.ConnInfo)
+        - streamConnRequests(connReqChanel <font color=blue>chan</font> *common.ConnInfo)
+
+        + Run()
+
+    }
+}
+
+
+"__builtin__.uint8" #.. "common.ConnLiveState"
+@enduml
