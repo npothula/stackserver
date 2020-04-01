@@ -1,0 +1,10 @@
+version: '3.7'
+services:
+  stackserver:
+    image: '${registry}:test_svcStackServer-${BUILD_NUMBER}'
+    build: .
+    ports:
+      - '8081:8080'
+
+networks:
+  stackserver-net:
