@@ -315,7 +315,10 @@ func (ss *StackServer) streamConnRequests(connReqChanel chan<- *common.ConnInfo)
 	defer ss.wgServerRun.Done()
 
 	// listen for incoming connections
-	ln, err := net.Listen(connProtocol, connHost+":"+connPort)
+	//ipAddr := common.GetOutboundIP()
+	//myHost := ipAddr.String() + ":" + connPort
+	myHost := connHost + ":" + connPort
+	ln, err := net.Listen(connProtocol, myHost)
 	if err != nil {
 		log.Fatalf("Failed to listen due to %s", err.Error())
 		os.Exit(1)
@@ -323,7 +326,7 @@ func (ss *StackServer) streamConnRequests(connReqChanel chan<- *common.ConnInfo)
 	// Close the listener when the application closes.
 	defer ln.Close()
 
-	log.Println("Listening on " + connHost + ":" + connPort)
+	log.Println("Listening on " + myHost)
 	for {
 		// Listen for an incoming connection.
 		connReq, err := ln.Accept()

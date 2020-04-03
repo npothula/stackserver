@@ -1,2 +1,4 @@
 
 1. Do Memory/CPU profiling with pprof
+2. Logging has written to console. It has to be saved into file at log folder
+3. Tests failed running in the docker container

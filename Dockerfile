@@ -2,15 +2,17 @@
 FROM golang:1.14.1-alpine3.11 AS dev_img
 
 ARG HOME_PATH="/home/test"
-ARG APP_PATH="test/svcStackServer"
-ARG GO_APP_PATH="/go/src/stackserver/svcStackServer"
+ARG GO_APP_PATH="/go/src/stackserver"
 ARG APP_BIN_PATH="/home/test/bin/svcStackServer"
 
 RUN apk update && apk upgrade \
-    && apk add --no-cache ca-certificates
+    && apk add --no-cache ca-certificates \
+    && apk add --update curl ruby ruby-bundler \
+    && rm -rf /var/cache/apk/*
 
 RUN mkdir -p $HOME_PATH/log
 RUN mkdir -p $HOME_PATH/tmp
+COPY ./tests/stack-test.rb ${HOME_PATH}/tmp
 
 # copying the source code and build in the container
 RUN mkdir -p $GO_APP_PATH
@@ -22,12 +24,12 @@ RUN chmod +x $APP_BIN_PATH
 
 
 # final stage
-FROM alpine:3.11 AS prod_img
+#FROM alpine:3.11 AS prod_img
 
-RUN mkdir -p /home/test \
-    && apk --no-cache add ca-certificates
+#RUN mkdir -p /home/test \
+#   && apk --no-cache add ca-certificates
 
-WORKDIR /home/test
-COPY --from=dev_img /home/test .
+#WORKDIR /home/test
+#COPY --from=dev_img /home/test .
 
 CMD ["/home/test/bin/svcStackServer"]
