@@ -1,22 +1,5 @@
 #!/usr/bin/env ruby
 
-#
-# Intro
-# -----
-#
-# We recognize that doing a coding exercise at a whiteboard during an
-# interview is stressful and likely doesn't represent how you would do if you
-# were to work on a problem in your own time, in a comfortable environment.
-#
-# Instead, we're asking you to do spend a few hours on writing a stack server
-# that passes this test suite.
-#
-# We're always open to feedback about the exercise and the process as a whole.
-# Please let us know if you have any ideas on how we can improve.
-#
-# If you have questions or get stuck during the exercise, please reach out to
-# your interviewer on the private Slack channel that you received by email.
-#
 # Getting started
 # ---------------
 #
@@ -29,34 +12,7 @@
 #
 #   $ ruby stack-test.rb -n test_single_request
 #
-# What to submit
-# --------------
-#
-# If you write a single file, send us that. If there are multiple files, put
-# them in a tarball or zipfile and send it along with instructions. Either
-# way, make sure to write any required instructions in the email or a supplied
-# README file.
-#
-# We kindly ask you not to post your solution online.
-#
-# What we look at
-# ---------------
-#
-# Besides counting the number of tests that your server passes/fails, there is
-# no easily quantifiable procedure to evaluating someone's code.
-#
-# We will look for correctness by running a more extensive test suite than
-# this one; and, of course, by close code inspection. We pay attention to the
-# potential for race conditions, busy loops, the exact order in which your
-# server handles requests, performs stack operations, and issues responses. We
-# look at how you structured the code and how easy or hard it is to
-# understand.
-#
-# Finally: bad layout and indentation, lots of stale, unused, or commented out
-# code, and trailing white space will make your code look unnecessarily bad.
-# Conditional logging is encouraged. Spaghetti code is frowned upon. Aim for
-# code that you would be proud to deploy to a live server.
-#
+
 # Stack server
 # ------------
 #
@@ -149,15 +105,6 @@
 # the other half open. Phrased differently, if the return value of a read()
 # call on a socket indicates that the connection is closed, you can assume the
 # connection is also closed for writing. The inverse is true, also.
-#
-# This test suite is representative, but not comprehensive. We encourage you
-# to write more tests, but this is not required.
-#
-# You are welcome to write this in the language of your choice! You should
-# pick a language that you are very comfortable with; don't try an implemention
-# in CuttingEdgeLanguage2000 just because you think it will impress us.
-# We'd rather see a clean solution in BoringOldLanguage. You may use whichever
-# libraries you wish, but please provide clear installation instructions.
 #
 
 require 'socket'
